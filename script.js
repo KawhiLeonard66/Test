@@ -71,6 +71,7 @@ function resetGame() {
     score = 0;
 }
 
+// 键盘控制
 window.addEventListener('keydown', e => {
     switch (e.key) {
         case 'ArrowUp':
@@ -85,6 +86,38 @@ window.addEventListener('keydown', e => {
         case 'ArrowRight':
             if (direction.x === 0) direction = {x: 1, y: 0};
             break;
+    }
+});
+
+// 触摸控制
+let touchStartX = 0;
+let touchStartY = 0;
+
+window.addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+});
+
+window.addEventListener('touchend', e => {
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    const deltaX = touchEndX - touchStartX;
+    const deltaY = touchEndY - touchStartY;
+
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        // 水平滑动
+        if (deltaX > 0 && direction.x === 0) {
+            direction = {x: 1, y: 0}; // 向右
+        } else if (deltaX < 0 && direction.x === 0) {
+            direction = {x: -1, y: 0}; // 向左
+        }
+    } else {
+        // 垂直滑动
+        if (deltaY > 0 && direction.y === 0) {
+            direction = {x: 0, y: 1}; // 向下
+        } else if (deltaY < 0 && direction.y === 0) {
+            direction = {x: 0, y: -1}; // 向上
+        }
     }
 });
 
